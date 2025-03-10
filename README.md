@@ -15,6 +15,9 @@ com.example.m1w2d2restaurantmenuapp<br>
 │   ├── FoodCategory.kt      # Data class representing food categories.<br>
 │   ├── MenuItem.kt         # Data class representing menu items.<br>
 
+<h2>Item UI Structure</h2>
+<img width="950" alt="Image" src="https://github.com/user-attachments/assets/4b87a94c-c1c5-4782-8fb7-fd9026618759" />
+
 <h2>Screenshot</h2>
 <img width="950" alt="Image" src="https://github.com/user-attachments/assets/18f4570f-4672-4195-9919-30ecf8e5a19e" />
 
