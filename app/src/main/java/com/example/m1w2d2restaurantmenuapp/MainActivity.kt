@@ -20,6 +20,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.magnifier
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
@@ -33,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -73,25 +76,24 @@ class MainActivity : ComponentActivity() {
 
                 RestaurantPage(
                     Modifier,
-                    catgs = catgs
+                    catgs = catgs,
+                    items = items
                 )
 
-                fun ItemUI() {
-
-                }
+//                ItemUI(items[0])
             }
         }
     }
 
     @Composable
     fun RestaurantPage(
-        modifier: Modifier = Modifier, catgs: List<FoodCategory>
+        modifier: Modifier = Modifier, catgs: List<FoodCategory>, items: List<MenuItem>
     ) {
         Column(
             modifier.fillMaxSize()
                 .padding(0.dp, 16.dp, 0.dp, 16.dp)
         ) {
-            //Horizontal Category List
+            //Horizontal Categories List
             LazyRow(
                 modifier = Modifier,
                 contentPadding = PaddingValues(16.dp)
@@ -104,8 +106,12 @@ class MainActivity : ComponentActivity() {
             Spacer(Modifier.height(24.dp))
 
             //Vertical Menu Items List
-            LazyColumn {
-
+            LazyColumn (modifier = Modifier,
+                contentPadding = PaddingValues(16.dp)
+            ) {
+                items(items = items) { item ->
+                    ItemUI(item)
+                }
             }
         }
     }
@@ -143,25 +149,57 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ItemUI(item: MenuItem){
-    Card(){
-        Row(){
-            //Image
-            Image(
-                painter = painterResource(item.image),//(item.imageUrl)
-                contentDescription = "image"
-            )
+    Card(
+        modifier = Modifier.padding(8.dp)
+            .fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = Color.LightGray)
+    ){
+        Row(
+            modifier = Modifier.fillMaxWidth()
+                .padding(8.dp)
+        ){
+            //it tok so long, it didn't worked until 11:58pm  :(
+            BadgedBox(
+                badge = {
+                    if (item.isPopular){
+                        Badge(
+                            containerColor = Color.Green,
+                            contentColor = Color.DarkGray,
+                            modifier = Modifier
+                                .width(50.dp)
+                                .height(16.dp)
+                                .align(Alignment.BottomEnd), //Trying to change the badge location, but it does not work !!
 
-            //Column
-            Column () {
+                        ){
+                            Text(text = "Popular", modifier = Modifier)
+                        }
+                    }
+                }
+            )
+            {
+                //Item Image
+                Image(
+                    painter = painterResource(item.image),//(item.imageUrl)
+                    contentDescription = "image",
+                    modifier = Modifier
+                        .width(100.dp)
+                )
+            }
+            Spacer(Modifier.width(4.dp))
+            //Column for item info
+            Column (modifier = Modifier.fillMaxWidth()) {
 
                 //A row for item name and price
-                Row(){
-
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                ){
+                    Text(text = item.name, fontSize = 19.sp, color = Color.Black)
+                    Spacer(Modifier.width(16.dp))
+                    Text(text = item.price.toString(), fontSize = 19.sp, color = Color.Black, textAlign= TextAlign.End)
                 }
                 //Item description
-                Text()
+                Text(text = item.description, fontSize = 12.sp, color = Color.Black)
             }
         }
     }
-
 }
